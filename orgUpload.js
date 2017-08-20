@@ -32,5 +32,3 @@ function orgsUpload() {
 }
 
 module.exports = orgsUpload;
-
-orgsUpload();

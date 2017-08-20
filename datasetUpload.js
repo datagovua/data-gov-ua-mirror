@@ -1,5 +1,6 @@
 const createDbReader = require('./dbReader');
 const createUploader = require('./uploader');
+const orgsUpload = require('./orgUpload');
 
 function readDatasets(handle) {
   return read(handle, 'readDatasets');
@@ -45,4 +46,6 @@ function datasetsUpload() {
 
 module.exports = datasetsUpload;
 
-datasetsUpload();
+orgsUpload().then(() => {
+  return datasetsUpload();
+})
