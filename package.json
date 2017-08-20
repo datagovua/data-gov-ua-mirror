@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "ckan": "^0.2.3",
+    "rethinkdb": "^2.3.3"
+  }
+}

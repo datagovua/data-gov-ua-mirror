@@ -1,0 +1,12 @@
+version: '3'
+services:
+  mirror:
+    build: 'build'
+    volumes:
+      - .:/src
+    working_dir: /src
+    command: sh -c 'yarn install && node uploader.js'
+    environment:
+      CKAN_URL: 'http://172.17.0.1:5000'
+      CKAN_API_TOKEN: '262da62d-6017-44e1-9add-2c4d627628f8'
+      RETHINKDB_HOST: '172.17.0.1'
