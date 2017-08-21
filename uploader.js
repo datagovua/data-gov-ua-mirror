@@ -152,6 +152,7 @@ module.exports = function createUploader() {
               }
             });
           } else {
+            console.log('created ' + org.organization_id);
             if(result.error) {
               reject(result.error)
             } else {
