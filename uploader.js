@@ -37,18 +37,24 @@ module.exports = function createUploader() {
   return {
     createResource(revision) {
       return new Promise(function(resolve, reject) {
+        let name = revision.title || revision.description;
+        if(revision.revision_created) {
+          name = revision.revision_created + ' ' + name;
+        }
         let data = {
           package_id: 'data-gov-ua-node-' + revision.dataset_node_id,
           url: revision.base_url + revision.url,
           revision_id: 'data-gov-ua-revision-' + revision.revision_id,
           id: 'data-gov-ua-revision-' + revision.revision_id,
+          name: name,
           description: revision.description,
-          name: revision.revision_created + ' ' + (revision.title || revision.description),
           format: revision.format,
           mimetype: revision.filemime,
           size: revision.filesize,
-          created: parseDate(revision.revision_created),
         };
+        if(revision.revision_created) {
+          data['created'] = parseDate(revision.revision_created);
+        }
         client.action('resource_show', { id: data.id }, function(err, result) {
           if(result.error && result.error.message === 'Not found') {
             console.log('creating ' + revision.revision_id);
@@ -71,7 +77,7 @@ module.exports = function createUploader() {
               }
             });
           } else {
-            console.log(revision.revision_id + ' already exists, skipping');
+            console.log(revision.revision_id + ' already exists, skipping (TODO: compare fields)');
             resolve();
           }
         });
