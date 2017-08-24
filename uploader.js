@@ -44,6 +44,7 @@ module.exports = function createUploader() {
           id: 'data-gov-ua-revision-' + revision.revision_id,
           description: revision.description,
           name: revision.revision_created + ' ' + (revision.title || revision.description),
+          format: revision.format,
           mimetype: revision.filemime,
           size: revision.filesize,
           created: parseDate(revision.revision_created),
@@ -117,29 +118,34 @@ module.exports = function createUploader() {
 
     createOrganization(org) {
       return new Promise(function(resolve, reject) {
+        let extras = [
+          {
+            key: 'phone',
+            value: org.phone,
+          },
+          {
+            key: 'category',
+            value: org.category,
+          },
+        ];
+        if(org.website) {
+          extras.push({
+            key: 'website',
+            value: org.website,
+          })
+        };
+        if(org.address) {
+          extras.push({
+            key: 'address',
+            value: org.address,
+          });
+        };
         let data = {
           name: 'data-gov-ua-' + org.organization_id,
           id: 'data-gov-ua-' + org.organization_id,
           title: org.organization_name,
           state: 'active',
-          extras: [
-            {
-              key: 'website',
-              value: org.website,
-            },
-            {
-              key: 'address',
-              value: org.address,
-            },
-            {
-              key: 'phone',
-              value: org.phone,
-            },
-            {
-              key: 'category',
-              value: org.category,
-            },
-          ],
+          extras: extras,
         };
         client.action('organization_create', data, function(err, result) {
           if(errorGroupExists(result.error)) {
